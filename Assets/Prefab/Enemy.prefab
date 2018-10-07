@@ -162,6 +162,8 @@ GameObject:
   - component: {fileID: 4150458584535018}
   - component: {fileID: 33722268891562978}
   - component: {fileID: 23827194118778870}
+  - component: {fileID: 65340853338903960}
+  - component: {fileID: 114734861337382954}
   m_Layer: 0
   m_Name: Z_head_02
   m_TagString: Untagged
@@ -996,6 +998,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.8, y: 1.7, z: 0.6}
   m_Center: {x: 0, y: 0.85, z: 0}
+--- !u!65 &65340853338903960
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1362476009705010}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.5447421, y: 0.6691943, z: 0.6137521}
+  m_Center: {x: -0.0017547237, y: 0.024054535, z: 0.06793023}
 --- !u!95 &95751183479034384
 Animator:
   serializedVersion: 3
@@ -1051,6 +1065,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &114734861337382954
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1362476009705010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4503f9e2e61dff24bbf37a24728af1e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  c_Zombie: {fileID: 114855142655418542}
+  c_target: {fileID: 0}
 --- !u!114 &114767858863115210
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1103,7 +1130,8 @@ MonoBehaviour:
   n_Hp: 50
   n_MaxHp: 50
   f_movespeed: 4
-  f_walkSpeed: 1.5
+  f_walkSpeed: 1
+  n_dam: 5
   c_target: {fileID: 0}
   m_Hpbar: {fileID: 114953428120979568}
 --- !u!114 &114953428120979568

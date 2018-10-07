@@ -8,11 +8,20 @@ public class Player : MonoBehaviour {
     public float fmoveSpeed = 5f; //이동속도
     public float fjumpPower = 5f; //점프힘
     public float f_reloadSpeed = 1; //재장전 속도
-    public int n_Hp;
-    public int n_MaxHp;
-    public int n_Dam;    
+    public int n_Hp = 100;
+    public int n_MaxHp = 100;
+    public int n_Dam = 10;
+    public int n_Armor = 0;
     public float f_fireSpeedTime = 0.5f; //연사속도
+    public float f_kitTime = 30; //키트 재사용 시간
+    float f_kitCoolTime = 0; //키트 시간 감소
+    bool b_useKit = false; //키트 사용 여부
 
+    public HpBar m_hpbar;
+    float f_max; //Hpbar의 크기
+    public Kitbar m_kitbar;
+    public GameObject g_kitBar;
+    float f_kitMax; //kitbar 크기
     public float f_fireSpeed = 0f; //발사까지가능까지남은시간
     public float frotateSpeed = 5f; //회전속도
     float f_xaxis; //x축
@@ -33,6 +42,7 @@ public class Player : MonoBehaviour {
     public GameObject fireCam; //정밀조준 카메라
     bool b_camMode = false; //카메라 모드
     bool b_fireCheck = false; //발사가능여부
+    public Text t_kitCoolTimeText; //키트 쿨타임 표시
     //public Enemy c_target; //적
     //bool b_targetCheck = false; //적포착여부
 
@@ -48,23 +58,38 @@ public class Player : MonoBehaviour {
     }
 
     void Start () {
+        f_max = m_hpbar.m_cRectTransform.sizeDelta.x;
+        f_kitMax = m_kitbar.m_cRectTransform.sizeDelta.y;
         Cursor.visible = false; //커서 숨기기
         Cursor.lockState = CursorLockMode.Locked; //커서 화면안에 가두기
 
         n_bulletcount = 30;
 
-        n_Hp = 100;
-        n_MaxHp = n_Hp;
+        //n_Hp = 100;
+        //n_MaxHp = n_Hp;
 	}
-	
-	void Update () {
+
+    public void ChangeHp(float unithp, float unitmaxhp)//HP바의 체력변화
+    {
+        float HpRatio = unithp / unitmaxhp * f_max;
+        m_hpbar.m_cRectTransform.sizeDelta = new Vector3(HpRatio, m_hpbar.m_cRectTransform.sizeDelta.y);
+    }
+
+    void ChangeKit(float kitcooltime, float kitcooltimemax)//HP바의 체력변화
+    {
+        float kitRatio = kitcooltime / kitcooltimemax * f_kitMax;
+        m_kitbar.m_cRectTransform.sizeDelta = new Vector3(m_kitbar.m_cRectTransform.sizeDelta.x, kitRatio);
+    }
+
+    void Update () {
         Move();
         AniUpdate();
         Mouss();
         Fire();
-        BulletCounttext();
+        UItext();
         CamMode();
         FireCheck();
+        firstAidKit();
     }
 
     void FixedUpdate() //Rigidbody를 다룰때 사용
@@ -83,6 +108,45 @@ public class Player : MonoBehaviour {
         {
             mainCam.SetActive(false);
             fireCam.SetActive(true);
+        }
+    }
+
+    void firstAidKit()
+    {
+        if (!(b_useKit))
+        {
+            t_kitCoolTimeText.text = "";
+            if (Input.GetKeyDown(KeyCode.Alpha9))
+            {
+                n_Hp += (n_MaxHp / 2);
+                if (n_Hp > n_MaxHp)
+                {
+                    n_Hp = n_MaxHp;
+                }
+                ChangeHp(n_Hp, n_MaxHp);
+                f_kitCoolTime = f_kitTime;
+                b_useKit = true;
+            }
+        }
+        else
+        {
+            f_kitCoolTime -= Time.deltaTime;           
+            t_kitCoolTimeText.text = (int)f_kitCoolTime + "";
+            if (f_kitCoolTime <= 0)
+            {
+                f_kitCoolTime = 0;
+                b_useKit = false;              
+            }
+        }
+
+        if (f_kitCoolTime <= 0)
+        {
+            g_kitBar.SetActive(false);
+        }
+        else
+        {
+            g_kitBar.SetActive(true);
+            ChangeKit(f_kitCoolTime, f_kitTime);           
         }
     }
 
@@ -213,8 +277,9 @@ public class Player : MonoBehaviour {
         }
     }
 
-    void BulletCounttext()
+    void UItext()
     {
-        tbulletCountText.text = n_bulletcount + " / ∞";
+        tbulletCountText.text = n_bulletcount + " / ∞"; //총알 감소 텍스트
+        
     }
 }

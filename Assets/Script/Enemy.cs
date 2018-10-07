@@ -7,17 +7,22 @@ public class Enemy : MonoBehaviour {
 
     public int n_Hp = 50;
     public int n_MaxHp = 50;
-    public float f_movespeed = 3.5f;
-    public float f_walkSpeed = 1.5f;
+    public float f_movespeed = 4f;
+    public float f_walkSpeed = 1f;
+    public int n_dam = 5; 
     float deadtime = 1.2f; //사라지는 시간
     float f_dist; //기존위치와 좀비 위치와의 거리. 
+    float f_targetDist; //좀비와 플레이어간의 거리
+    float looktime = 1; //재자리 공격시 바라보게 만들기위한 시간
 
-    public Player c_target;
+    public Player c_target; //플레이어를 인식
     public HpBar m_Hpbar;
     float f_max; //Hpbar의 크기
     bool b_return = false; //기존위치로 되돌아갈지 여부
     bool b_randomMove = true; //타겟이 없을경우 주변 랜덤 이동
     bool b_resetRandomLocation = true; //랜덤좌표 도달시 새로운 좌표 생성용
+    bool b_attack = false; //공격여부
+    bool b_attackfinish = false; 
 
     NavMeshAgent nav;
     Vector3 selfposition; //처음위치 저장용
@@ -115,6 +120,45 @@ public class Enemy : MonoBehaviour {
                 this.targetposition = c_target.transform.position;
                 m_animator.SetBool("Run", true);
                 nav.speed = f_movespeed;
+                f_targetDist = Vector3.Distance(this.transform.position, c_target.transform.position);
+                if (f_targetDist <= 1.4)
+                {
+                    this.targetposition = this.transform.position;
+                    looktime -= Time.deltaTime;
+                    if (looktime <= 0)
+                    {
+                        this.transform.LookAt(c_target.transform);
+                        looktime = 1;
+                    }
+                    m_animator.SetBool("Attack", true);
+
+                    //float looktime = 0;
+                    //if (b_attackfinish)
+                    //{
+                    //    looktime -= Time.deltaTime;
+                    //    if (looktime <= 0)
+                    //    {
+                    //        b_attackfinish = false;
+                    //        looktime = 1;
+                    //    }
+                    //}
+
+                    //if (!(b_attackfinish))
+                    //{
+                    //    b_attack = true;
+                    //    if (b_attack)
+                    //    {
+                    //        this.targetposition = this.transform.position;
+                    //        m_animator.SetBool("Attack", true);
+                    //        b_attackfinish = true;
+                    //    }
+                    //}
+                }
+                else
+                {
+                    this.targetposition = c_target.transform.position;
+                    m_animator.SetBool("Attack", false);
+                }
 
                 f_dist = Vector3.Distance(this.transform.position, selfposition);
                 if (f_dist >= 30)
@@ -149,4 +193,19 @@ public class Enemy : MonoBehaviour {
             b_resetRandomLocation = true;
         }
     }
+
+    //void AttackMode()
+    //{
+    //    if (b_attack)
+    //    {
+    //        this.targetposition = this.transform.position;
+    //        m_animator.SetBool("Attack", true);
+    //        b_attackfinish = true;
+    //    }
+    //    else
+    //    {
+    //        this.targetposition = c_target.transform.position;
+    //        m_animator.SetBool("Attack", false);
+    //    }
+    //}
 }
