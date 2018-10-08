@@ -7,7 +7,7 @@ public class EnemyAttack : MonoBehaviour {
     public Enemy c_Zombie;
     public Player c_target;
     float f_attacktime = 1;
-    int n_hitDam;
+    float n_hitDam;
 
     //void Awake()
     //{

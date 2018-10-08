@@ -5,15 +5,17 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour {
 
-    public int n_Hp = 50;
-    public int n_MaxHp = 50;
+    public float n_Hp = 50;
+    public float n_MaxHp = 50;
     public float f_movespeed = 4f;
     public float f_walkSpeed = 1f;
-    public int n_dam = 5; 
+    public float n_dam = 5; 
     float deadtime = 1.2f; //사라지는 시간
     float f_dist; //기존위치와 좀비 위치와의 거리. 
     float f_targetDist; //좀비와 플레이어간의 거리
     float looktime = 1; //재자리 공격시 바라보게 만들기위한 시간
+    public int n_giveExp = 10; //사망시 주는 경험치
+    public GameObject shotEffect; //피격 이펙트
 
     public Player c_target; //플레이어를 인식
     public HpBar m_Hpbar;
@@ -22,7 +24,9 @@ public class Enemy : MonoBehaviour {
     bool b_randomMove = true; //타겟이 없을경우 주변 랜덤 이동
     bool b_resetRandomLocation = true; //랜덤좌표 도달시 새로운 좌표 생성용
     bool b_attack = false; //공격여부
-    bool b_attackfinish = false; 
+    bool b_attackfinish = false;
+    public bool b_shotCheck = false; //피격체크
+    float f_stoptime = 0.5f; //경직시간
 
     NavMeshAgent nav;
     Vector3 selfposition; //처음위치 저장용
@@ -61,7 +65,17 @@ public class Enemy : MonoBehaviour {
         {
             nav.SetDestination(targetposition);
         }
+        ShotCheck();
 	}
+
+    void ShotCheck()
+    {
+        if (b_shotCheck)
+        {
+            f_stoptime -= Time.deltaTime;
+            b_shotCheck = false;
+        }
+    }
 
     void Dead()
     {
@@ -117,8 +131,18 @@ public class Enemy : MonoBehaviour {
 
             if (c_target != null)
             {
-                this.targetposition = c_target.transform.position;
-                m_animator.SetBool("Run", true);
+                if (!(b_shotCheck))
+                {
+                    this.targetposition = c_target.transform.position;
+                    m_animator.SetBool("Run", true);
+                }
+                else
+                {
+                    this.targetposition = this.transform.position;
+                    m_animator.SetBool("Run", false);
+                }
+                //this.targetposition = c_target.transform.position;
+                //m_animator.SetBool("Run", true);
                 nav.speed = f_movespeed;
                 f_targetDist = Vector3.Distance(this.transform.position, c_target.transform.position);
                 if (f_targetDist <= 1.4)
@@ -156,7 +180,10 @@ public class Enemy : MonoBehaviour {
                 }
                 else
                 {
-                    this.targetposition = c_target.transform.position;
+                    if (!(b_shotCheck))
+                    {
+                        this.targetposition = c_target.transform.position;
+                    }
                     m_animator.SetBool("Attack", false);
                 }
 

@@ -13,7 +13,10 @@ public class CamAim : MonoBehaviour {
 
     void Update()
     {
-        f_mouseXaxis = Input.GetAxis("Mouse Y");
-        transform.Rotate(new Vector3(-f_mouseXaxis * frotateSpeed, 0, 0));
+        if (Time.timeScale == 1)
+        {
+            f_mouseXaxis = Input.GetAxis("Mouse Y");
+            transform.Rotate(new Vector3(-f_mouseXaxis * frotateSpeed, 0, 0));
+        }
     }
 }
