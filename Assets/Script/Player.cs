@@ -21,7 +21,7 @@ public class Player : MonoBehaviour {
     public int n_expMax = 100;
     public int n_bonusStat = 0;
     bool b_StatusWindowCheck = false; //스텟창 오픈여부
-    bool b_MapCheck = false; //맵 오픈 여부
+    public bool b_MapCheck = false; //맵 오픈 여부
 
     public GameObject StatusWindow; //스텟창    
     public GameObject Firepoint; //발사위치
@@ -31,7 +31,7 @@ public class Player : MonoBehaviour {
     public GameObject hitEffect; //타격효과
     public GameObject mainCam; //메인 카메라
     public GameObject fireCam; //정밀조준 카메라
-    public GameObject MapCam; //맵 카메라
+    public GameObject MinMap; //Mini맵
     public GameObject Map; //맵
     public GameObject Mark; //마크
 
@@ -125,8 +125,6 @@ public class Player : MonoBehaviour {
             LvUp();
         }
         UItext();
-        Mark.transform.position = new Vector3(this.transform.position.x, -0.3f, this.transform.position.z);
-        MapCam.transform.rotation = Quaternion.Euler(-90, 0, 0);
     }
 
     void FixedUpdate() //Rigidbody를 다룰때 사용
@@ -136,6 +134,8 @@ public class Player : MonoBehaviour {
 
     void PlayerUI()
     {
+        Mark.transform.position = new Vector3(this.transform.position.x, -0.3f, this.transform.position.z);
+        
         if (!(b_StatusWindowCheck))
         {
             if (Input.GetKeyDown(KeyCode.C))
@@ -172,20 +172,22 @@ public class Player : MonoBehaviour {
         {
             if (Input.GetKeyDown(KeyCode.M))
             {
-                Time.timeScale = 0;
+                //Time.timeScale = 0;
                 Map.SetActive(true);
                 b_MapCheck = true;
-                MapCam.transform.position = new Vector3(this.transform.position.x, -150, this.transform.position.z);
+                MinMap.SetActive(false);
+                //MapCam.transform.position = new Vector3(this.transform.position.x, -150, this.transform.position.z);
             }            
         }
         else
         {
             if (Input.GetKeyDown(KeyCode.M))
             {
-                Time.timeScale = 1;
+                //Time.timeScale = 1;
                 Map.SetActive(false);
                 b_MapCheck = false;
-                MapCam.transform.position = new Vector3(this.transform.position.x, -50, this.transform.position.z);
+                MinMap.SetActive(true);
+                //MapCam.transform.position = new Vector3(this.transform.position.x, -50, this.transform.position.z);
             }            
         }
         //if (Input.GetKeyDown(KeyCode.O))
@@ -249,16 +251,10 @@ public class Player : MonoBehaviour {
         }
     }
 
-    void Mouss()
-    {
-        
-    }
-    
-
     void Move()
     {
-        f_xaxis = Input.GetAxisRaw("Horizontal");
-        f_zaxis = Input.GetAxisRaw("Vertical");
+        f_xaxis = Input.GetAxisRaw("MyHorizontal");
+        f_zaxis = Input.GetAxisRaw("MyVertical");
         f_mouseYaxis = Input.GetAxis("Mouse X");
         f_mouseXaxis = Input.GetAxis("Mouse Y");
 
@@ -385,6 +381,7 @@ public class Player : MonoBehaviour {
             n_Lv++;
             n_expMax = 100 * n_Lv;
             n_bonusStat++;
+            ChangeExp(n_exp, n_expMax);
         }
     }
 
@@ -396,26 +393,20 @@ public class Player : MonoBehaviour {
         t_damegeText.text = "Damege: " + (int)n_Dam;        
         if (f_reloadSpeed > 0.1)
         {           
-            //t_reloadText.text = "Reload: " + (int)f_reloadSpeed + " S";
             t_reloadText.text = string.Format("Reload: {0:0.#} S", f_reloadSpeed);
         }
         else
-        {
-            //t_reloadText.text = "Reload: " + (int)f_reloadSpeed + " S (MAX)";
+        {           
             t_reloadText.text = string.Format("Reload: {0:0.#} S (MAX)", f_reloadSpeed);
         }
-        //t_armorText.text = "Armor: " + (int)n_Armor;
         t_armorText.text = string.Format("Armor: {0:0.#}", n_Armor);
-        //t_moveSpeedText.text = "MoveSpeed: " + (int)fmoveSpeed;
         t_moveSpeedText.text = string.Format("MoveSpeed: {0:0.#}", fmoveSpeed);
         if (f_fireSpeedTime > 0.1)
         {
-            //t_fireSpeedText.text = "FireSpeed" + (int)f_fireSpeedTime + " S";
             t_fireSpeedText.text = string.Format("FireSpeed: {0:0.###} S", f_fireSpeedTime);
         }
         else
         {
-            //t_fireSpeedText.text = "FireSpeed" + (int)f_fireSpeedTime + " S (MAX)";
             t_fireSpeedText.text = string.Format("FireSpeed: {0:0.###} S (MAX)", f_fireSpeedTime);
         }
 
@@ -494,14 +485,4 @@ public class Player : MonoBehaviour {
             f_kitTime--;
         }
     }
-
-    //public Text t_hpText;
-    //public Text t_damegeText;
-    //public Text t_reloadText;
-    //public Text t_armorText;
-    //public Text t_moveSpeedText;
-    //public Text t_fireSpeedText;
-    //public Text t_kitCoolTimeText_Status;
-    //public Text t_bonusText;
-    //public Text t_expText;
 }

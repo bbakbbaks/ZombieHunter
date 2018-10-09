@@ -145,7 +145,7 @@ public class Enemy : MonoBehaviour {
                 //m_animator.SetBool("Run", true);
                 nav.speed = f_movespeed;
                 f_targetDist = Vector3.Distance(this.transform.position, c_target.transform.position);
-                if (f_targetDist <= 1.4)
+                if (f_targetDist <= 1.3)
                 {
                     this.targetposition = this.transform.position;
                     looktime -= Time.deltaTime;
