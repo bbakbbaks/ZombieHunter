@@ -294,7 +294,12 @@ public class Player : MonoBehaviour {
         }
         if (Input.GetMouseButton(0))
         {
-            if (n_bulletcount > 0 && f_reloadTime <= 0 && b_fireCheck)
+            if (n_bulletcount == 0)
+            {
+                b_magazine = false;
+            }
+
+            if (n_bulletcount >= 1 && f_reloadTime <= 0 && b_fireCheck)
             {
                 b_fireCheck = false;
                 //m_animator.SetBool("Shot", true);
@@ -328,12 +333,7 @@ public class Player : MonoBehaviour {
                 n_bulletcount--;
                 //m_animator.SetBool("Shot", false);
 
-            }
-            
-            if (n_bulletcount == 0)
-            {
-                b_magazine = false;
-            }
+            }            
         }
         
 
@@ -341,10 +341,10 @@ public class Player : MonoBehaviour {
         {
             if (Input.GetKeyDown(KeyCode.R) || !(b_magazine))
             {
+                b_magazine = true;
                 SoundManager.instance.ReloadSound();
                 f_reloadTime = f_reloadSpeed;
-                b_reloadCheck = true;
-                b_magazine = true;
+                b_reloadCheck = true;               
             }
         }
 
@@ -430,6 +430,7 @@ public class Player : MonoBehaviour {
             n_MaxHp += 50;
             n_Hp += 50;
         }
+        ChangeHp(n_Hp, n_MaxHp);
     }
 
     public void DamPlusButton()
