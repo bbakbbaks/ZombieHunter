@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
     public BulletManager c_bulletManager;
+    public Exit c_exit;
 
     public GameObject tutorialMove;
     public GameObject tutorialFire;
@@ -13,6 +14,7 @@ public class GameManager : MonoBehaviour {
     public GameObject tutorialStatus;
     public GameObject tutorialMap;
     public GameObject tutorialGoal;
+    public GameObject exitScene;
 
     public int n_tutorialCount = 0;
 
@@ -31,7 +33,9 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         TutorialStep();
-	}
+        ExitCheck();
+
+    }
 
     void TutorialStep()
     {
@@ -131,6 +135,25 @@ public class GameManager : MonoBehaviour {
             {
                 n_tutorialCount = 0;
             }
+        }
+    }
+
+    void ExitCheck()
+    {
+        if (c_exit.b_exitCheck == true)
+        {
+            Time.timeScale = 0;
+            exitScene.SetActive(true);
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            Time.timeScale = 1;
+            exitScene.SetActive(false);
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+
         }
     }
 
