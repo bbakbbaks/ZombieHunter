@@ -56,6 +56,8 @@ public class Player : MonoBehaviour {
     bool b_magazine = true; //탄창이 비어있는지 체크
     bool b_camMode = false; //카메라 모드
     bool b_fireCheck = false; //발사가능여부
+    float f_deathTime = 1.5f; //죽는 모션 시간
+    public bool b_deathCheck = false; //플레이어 사망여부
 
     public Text t_kitCoolTimeText; //키트 쿨타임 표시
     public Text tbulletCountText; //총알 수 표시
@@ -112,19 +114,23 @@ public class Player : MonoBehaviour {
     }
 
     void Update () {
-        PlayerUI();
-        if (Time.timeScale == 1)
+        if (!(b_deathCheck))
         {
-            Move();
-            AniUpdate();
-            Fire();
-            
-            CamMode();
-            FireCheck();
-            firstAidKit();
-            LvUp();
+            PlayerUI();
+            if (Time.timeScale == 1)
+            {
+                Move();
+                AniUpdate();
+                Fire();
+
+                CamMode();
+                FireCheck();
+                firstAidKit();
+                LvUp();
+            }
+            UItext();
         }
-        UItext();
+        Dead();
     }
 
     void FixedUpdate() //Rigidbody를 다룰때 사용
@@ -485,5 +491,20 @@ public class Player : MonoBehaviour {
             n_bonusStat--;
             f_kitTime--;
         }
+    }
+
+    public void Dead()
+    {
+        if (n_Hp <= 0)
+        {
+            m_animator.SetBool("Die", true);
+            f_deathTime -= Time.deltaTime;
+            if (f_deathTime <= 0)
+            {
+                f_deathTime = 0;
+                b_deathCheck = true;
+            }
+        }
+       
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour {
     public BulletManager c_bulletManager;
     public Exit c_exit;
+    public Player c_player;
 
     public GameObject tutorialMove;
     public GameObject tutorialFire;
@@ -15,8 +16,11 @@ public class GameManager : MonoBehaviour {
     public GameObject tutorialMap;
     public GameObject tutorialGoal;
     public GameObject exitScene;
+    public GameObject gameOver;
 
     public int n_tutorialCount = 0;
+
+    bool b_tutorialCheck = true;
 
     static GameManager m_cInstance;
 
@@ -34,7 +38,17 @@ public class GameManager : MonoBehaviour {
 	void Update () {
         TutorialStep();
         ExitCheck();
+        EndGame();
 
+    }
+
+    void EndGame()
+    {
+        if (c_player.b_deathCheck)
+        {
+            Time.timeScale = 0;
+            gameOver.SetActive(true);
+        }
     }
 
     void TutorialStep()
@@ -51,73 +65,77 @@ public class GameManager : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.F1))
         {
             n_tutorialCount = 0;
+            b_tutorialCheck = true;
         }
-
-        if (n_tutorialCount == 0)
+        if (b_tutorialCheck)
         {
-            tutorialMove.SetActive(true);
-            tutorialFire.SetActive(false);
-        }
+            if (n_tutorialCount == 0)
+            {
+                tutorialMove.SetActive(true);
+                tutorialFire.SetActive(false);
+            }
 
-        if (n_tutorialCount == 1)
-        {
-            tutorialMove.SetActive(false);
-            tutorialFire.SetActive(true);
-            tutorialUiWindow.SetActive(false);
-        }
+            if (n_tutorialCount == 1)
+            {
+                tutorialMove.SetActive(false);
+                tutorialFire.SetActive(true);
+                tutorialUiWindow.SetActive(false);
+            }
 
-        if (n_tutorialCount == 2)
-        {
-            tutorialFire.SetActive(false);
-            tutorialUiWindow.SetActive(true);
-            tutorialBullet.SetActive(false);
-        }
+            if (n_tutorialCount == 2)
+            {
+                tutorialFire.SetActive(false);
+                tutorialUiWindow.SetActive(true);
+                tutorialBullet.SetActive(false);
+            }
 
-        if (n_tutorialCount == 3)
-        {
-            tutorialUiWindow.SetActive(false);
-            tutorialBullet.SetActive(true);
-            tutorialKit.SetActive(false);
-        }
+            if (n_tutorialCount == 3)
+            {
+                tutorialUiWindow.SetActive(false);
+                tutorialBullet.SetActive(true);
+                tutorialKit.SetActive(false);
+            }
 
-        if (n_tutorialCount == 4)
-        {
-            tutorialBullet.SetActive(false);
-            tutorialKit.SetActive(true);
-            tutorialStatus.SetActive(false);
-        }
+            if (n_tutorialCount == 4)
+            {
+                tutorialBullet.SetActive(false);
+                tutorialKit.SetActive(true);
+                tutorialStatus.SetActive(false);
+            }
 
-        if (n_tutorialCount == 5)
-        {
-            tutorialKit.SetActive(false);
-            tutorialStatus.SetActive(true);
-            tutorialMap.SetActive(false);
-        }
+            if (n_tutorialCount == 5)
+            {
+                tutorialKit.SetActive(false);
+                tutorialStatus.SetActive(true);
+                tutorialMap.SetActive(false);
+            }
 
-        if (n_tutorialCount == 6)
-        {
-            tutorialStatus.SetActive(false);
-            tutorialMap.SetActive(true);
-            tutorialGoal.SetActive(false);
-        }
+            if (n_tutorialCount == 6)
+            {
+                tutorialStatus.SetActive(false);
+                tutorialMap.SetActive(true);
+                tutorialGoal.SetActive(false);
+            }
 
-        if (n_tutorialCount == 7)
-        {
-            tutorialMap.SetActive(false);
-            tutorialGoal.SetActive(true);           
-        }
+            if (n_tutorialCount == 7)
+            {
+                tutorialMap.SetActive(false);
+                tutorialGoal.SetActive(true);
+            }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            n_tutorialCount = -1;
-            tutorialMove.SetActive(false);
-            tutorialFire.SetActive(false);
-            tutorialUiWindow.SetActive(false);
-            tutorialBullet.SetActive(false);
-            tutorialKit.SetActive(false);
-            tutorialStatus.SetActive(false);
-            tutorialMap.SetActive(false);
-            tutorialGoal.SetActive(false);
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                n_tutorialCount = -1;
+                tutorialMove.SetActive(false);
+                tutorialFire.SetActive(false);
+                tutorialUiWindow.SetActive(false);
+                tutorialBullet.SetActive(false);
+                tutorialKit.SetActive(false);
+                tutorialStatus.SetActive(false);
+                tutorialMap.SetActive(false);
+                tutorialGoal.SetActive(false);
+                b_tutorialCheck = false;
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.RightArrow))
