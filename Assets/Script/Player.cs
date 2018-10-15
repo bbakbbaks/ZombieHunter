@@ -72,6 +72,9 @@ public class Player : MonoBehaviour {
     public Text t_expText;
     public Text t_LvText;
 
+    public bool b_gameStart = false;
+    public bool b_menuCheck = false;
+
     //public Enemy c_target; //적
     //bool b_targetCheck = false; //적포착여부
 
@@ -90,8 +93,8 @@ public class Player : MonoBehaviour {
         f_max = m_hpbar.m_cRectTransform.sizeDelta.x;
         f_kitMax = m_kitbar.m_cRectTransform.sizeDelta.y;
         f_expMax = m_expBar.m_cRectTransform.sizeDelta.x;
-        Cursor.visible = false; //커서 숨기기
-        Cursor.lockState = CursorLockMode.Locked; //커서 화면안에 가두기
+        //Cursor.visible = false; //커서 숨기기
+        //Cursor.lockState = CursorLockMode.Locked; //커서 화면안에 가두기
         ChangeExp(n_exp, n_expMax);
 	}
 
@@ -114,23 +117,26 @@ public class Player : MonoBehaviour {
     }
 
     void Update () {
-        if (!(b_deathCheck))
+        if (b_gameStart)
         {
-            PlayerUI();
-            if (Time.timeScale == 1)
+            if (!(b_deathCheck))
             {
-                Move();
-                AniUpdate();
-                Fire();
+                PlayerUI();
+                if (Time.timeScale == 1)
+                {
+                    Move();
+                    AniUpdate();
+                    Fire();
 
-                CamMode();
-                FireCheck();
-                firstAidKit();
-                LvUp();
+                    CamMode();
+                    FireCheck();
+                    firstAidKit();
+                    LvUp();
+                }
+                UItext();
             }
-            UItext();
+            Dead();
         }
-        Dead();
     }
 
     void FixedUpdate() //Rigidbody를 다룰때 사용
@@ -196,12 +202,39 @@ public class Player : MonoBehaviour {
                 //MapCam.transform.position = new Vector3(this.transform.position.x, -50, this.transform.position.z);
             }            
         }
-        //if (Input.GetKeyDown(KeyCode.O))
-        //{
-        //    Cursor.visible = false;
-        //    Cursor.lockState = CursorLockMode.Locked;
-        //    b_mouseCheck = false;
-        //}
+        if (GameManager.GetInstance().n_tutorialCount == -1)
+        {
+            if (!(b_menuCheck))
+            {
+                Time.timeScale = 1;
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+                Map.SetActive(false);
+                b_MapCheck = false;
+                MinMap.SetActive(true);
+                StatusWindow.SetActive(false);
+                b_StatusWindowCheck = false;
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    b_menuCheck = true;
+                }
+            }
+            else
+            {
+                Time.timeScale = 0;
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+                Map.SetActive(false);
+                b_MapCheck = false;
+                MinMap.SetActive(true);
+                StatusWindow.SetActive(false);
+                b_StatusWindowCheck = false;
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    b_menuCheck = false;
+                }
+            }
+        }
     }
 
     void CamMode()

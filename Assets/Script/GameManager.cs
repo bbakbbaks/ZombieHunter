@@ -18,6 +18,9 @@ public class GameManager : MonoBehaviour {
     public GameObject exitScene;
     public GameObject gameOver;
 
+    public GUIManager m_cGUIManager;
+    public GUIManager.eScene m_eScene;
+
     public int n_tutorialCount = 0;
 
     bool b_tutorialCheck = true;
@@ -31,36 +34,28 @@ public class GameManager : MonoBehaviour {
     // Use this for initialization
     void Start () {
         m_cInstance = this;
+        m_cGUIManager.SetScene(m_eScene);
         //CreateBullet();
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {
         TutorialStep();
         ExitCheck();
         EndGame();
-
-    }
-
-    void EndGame()
-    {
-        if (c_player.b_deathCheck)
-        {
-            Time.timeScale = 0;
-            gameOver.SetActive(true);
-        }
+        MenuOnOff();
     }
 
     void TutorialStep()
     {
-        if (n_tutorialCount >= 0)
-        {
-            Time.timeScale = 0;
-        }
-        else
-        {
-            Time.timeScale = 1;
-        }
+        //if (n_tutorialCount >= 0)
+        //{
+        //    Time.timeScale = 0;
+        //}
+        //else
+        //{
+        //    Time.timeScale = 1;
+        //}
 
         if (Input.GetKeyDown(KeyCode.F1))
         {
@@ -156,22 +151,74 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    public void EventStart()
+    {
+        m_cGUIManager.SetScene(GUIManager.eScene.PLAY);
+        Cursor.visible = false; //커서 숨기기
+        Cursor.lockState = CursorLockMode.Locked; //커서 화면안에 가두기
+        c_player.b_gameStart = true;
+    }
+
+    public void EventExit()
+    {
+        Application.Quit();
+    }
+
+    public void EventGoMain()
+    {
+        m_cGUIManager.SetScene(GUIManager.eScene.TITLE);
+    }
+
+    public void EventKeepPlay()
+    {
+        c_player.b_menuCheck = false;
+    }
+
+    void MenuOnOff()
+    {
+        if (c_player.b_gameStart)
+        {
+            if (n_tutorialCount == -1 && !(c_exit.b_exitCheck) && !(c_player.b_deathCheck))
+            {
+                if (c_player.b_menuCheck)
+                {
+                    m_cGUIManager.SetScene(GUIManager.eScene.MENU);
+                }
+                else
+                {
+                    m_cGUIManager.SetScene(GUIManager.eScene.PLAY);
+                }
+            }
+        }
+    }
+
     void ExitCheck()
     {
-        if (c_exit.b_exitCheck == true)
+        if (c_exit.b_exitCheck)
         {
             Time.timeScale = 0;
-            exitScene.SetActive(true);
+            m_cGUIManager.SetScene(GUIManager.eScene.THEEND);
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
         }
         else
         {
-            Time.timeScale = 1;
-            exitScene.SetActive(false);
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
+            //Time.timeScale = 1;
+            //exitScene.SetActive(false);
+            //Cursor.visible = false;
+            //Cursor.lockState = CursorLockMode.Locked;
 
+        }
+    }
+
+    void EndGame()
+    {
+        if (c_player.b_deathCheck)
+        {
+            Time.timeScale = 0;
+            m_cGUIManager.SetScene(GUIManager.eScene.GAMEOVER);
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
         }
     }
 
