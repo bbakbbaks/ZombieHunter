@@ -146,7 +146,7 @@ public class Player : MonoBehaviour {
 
     void PlayerUI()
     {
-        Mark.transform.position = new Vector3(this.transform.position.x, -0.3f, this.transform.position.z);
+        Mark.transform.position = new Vector3(this.transform.position.x, -30f, this.transform.position.z);
         
         if (!(b_StatusWindowCheck))
         {
@@ -208,14 +208,14 @@ public class Player : MonoBehaviour {
             {
                 Time.timeScale = 1;
                 Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-                Map.SetActive(false);
-                b_MapCheck = false;
-                MinMap.SetActive(true);
-                StatusWindow.SetActive(false);
-                b_StatusWindowCheck = false;
+                Cursor.lockState = CursorLockMode.Locked;                 
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
+                    b_StatusWindowCheck = false;
+                    b_MapCheck = false;
+                    MinMap.SetActive(true);
+                    Map.SetActive(false);
+                    StatusWindow.SetActive(false);
                     b_menuCheck = true;
                 }
             }
@@ -223,14 +223,14 @@ public class Player : MonoBehaviour {
             {
                 Time.timeScale = 0;
                 Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
-                Map.SetActive(false);
-                b_MapCheck = false;
-                MinMap.SetActive(true);
-                StatusWindow.SetActive(false);
-                b_StatusWindowCheck = false;
+                Cursor.lockState = CursorLockMode.None;                              
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
+                    b_StatusWindowCheck = false;
+                    b_MapCheck = false;
+                    MinMap.SetActive(true);
+                    StatusWindow.SetActive(false);
+                    Map.SetActive(false);
                     b_menuCheck = false;
                 }
             }

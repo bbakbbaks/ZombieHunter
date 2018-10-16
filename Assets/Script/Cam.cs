@@ -5,16 +5,16 @@ using UnityEngine;
 public class Cam : MonoBehaviour {
     public GameObject player;
     public Player c_player;
-    public float offsetX = 0f;
-    public float offsetY = -50f;
-    public float offsetZ = 0f;
+    float offsetX = 0f;
+    float offsetY = -50f;
+    float offsetZ = 0f;
 
     Vector3 Camposition;
 
     void LateUpdate()//lateUpdate는 update가 끝난뒤에 호출
     {
         Camposition.x = player.transform.position.x + offsetX;
-        Camposition.y = player.transform.position.y + offsetY;
+        Camposition.y = offsetY;
         Camposition.z = player.transform.position.z + offsetZ;
 
         transform.position = Camposition;
@@ -24,7 +24,7 @@ public class Cam : MonoBehaviour {
     {
         if (c_player.b_MapCheck)
         {
-            offsetY = -150f;
+            offsetY = -180f;
             if (Input.GetKey(KeyCode.UpArrow))//키가 눌렸는지 확인하는 함수
             {
                 offsetZ += 20 * Time.deltaTime;
@@ -45,7 +45,7 @@ public class Cam : MonoBehaviour {
         else
         {
             offsetX = 0;
-            offsetY = -50f;
+            offsetY = -80f;
             offsetZ = 0;
         }
         transform.rotation = Quaternion.Euler(-90, 0, 0);
