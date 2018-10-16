@@ -20,14 +20,14 @@ public class Player : MonoBehaviour {
     public int n_exp = 0;
     public int n_expMax = 100;
     public int n_bonusStat = 0;
-    bool b_StatusWindowCheck = false; //스텟창 오픈여부
+    public bool b_StatusWindowCheck = false; //스텟창 오픈여부
     public bool b_MapCheck = false; //맵 오픈 여부
 
     public GameObject StatusWindow; //스텟창    
     public GameObject Firepoint; //발사위치
+    public GameObject Aimpoint; //에임위치
     public GameObject Bullet; //총알
     public GameObject FireEffect; //발사효과
-    public GameObject BulletRayObject; //레이저포인트
     public GameObject hitEffect; //타격효과
     public GameObject mainCam; //메인 카메라
     public GameObject fireCam; //정밀조준 카메라
@@ -54,7 +54,7 @@ public class Player : MonoBehaviour {
     public float f_reloadTime = 0; //재장전 시간  
     bool b_reloadCheck = false; //재장전 여부 체크
     bool b_magazine = true; //탄창이 비어있는지 체크
-    bool b_camMode = false; //카메라 모드
+    public bool b_camMode = false; //카메라 모드
     bool b_fireCheck = false; //발사가능여부
     float f_deathTime = 1.5f; //죽는 모션 시간
     public bool b_deathCheck = false; //플레이어 사망여부
@@ -205,12 +205,12 @@ public class Player : MonoBehaviour {
         if (GameManager.GetInstance().n_tutorialCount == -1)
         {
             if (!(b_menuCheck))
-            {
-                Time.timeScale = 1;
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;                 
+            {                                
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
+                    Time.timeScale = 0;
+                    Cursor.visible = true;
+                    Cursor.lockState = CursorLockMode.None;
                     b_StatusWindowCheck = false;
                     b_MapCheck = false;
                     MinMap.SetActive(true);
@@ -220,12 +220,12 @@ public class Player : MonoBehaviour {
                 }
             }
             else
-            {
-                Time.timeScale = 0;
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;                              
+            {                                             
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
+                    Time.timeScale = 1;
+                    Cursor.visible = false;
+                    Cursor.lockState = CursorLockMode.Locked;                  
                     b_StatusWindowCheck = false;
                     b_MapCheck = false;
                     MinMap.SetActive(true);
@@ -323,12 +323,10 @@ public class Player : MonoBehaviour {
     {
         if (Input.GetMouseButton(1))
         {
-            BulletRayObject.SetActive(true);
             b_camMode = true;
         }
         else
         {
-            BulletRayObject.SetActive(false);
             b_camMode = false;
         }
         if (Input.GetMouseButton(0))
@@ -345,7 +343,7 @@ public class Player : MonoBehaviour {
                 //m_animator.SetBool("Run", false);
                 //GameObject fireBullet = Instantiate(Bullet, Firepoint.transform.position, Firepoint.transform.rotation);
                 RaycastHit hit = new RaycastHit();
-                if (Physics.Raycast(Firepoint.transform.position, Firepoint.transform.forward, out hit, 30f))
+                if (Physics.Raycast(Aimpoint.transform.position, Aimpoint.transform.forward, out hit, 30f))
                 {
                     if (hit.collider.CompareTag("Enemy"))
                     {

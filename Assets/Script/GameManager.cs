@@ -172,6 +172,14 @@ public class GameManager : MonoBehaviour {
     public void EventKeepPlay()
     {
         c_player.b_menuCheck = false;
+        Time.timeScale = 1;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        c_player.b_StatusWindowCheck = false;
+        c_player.b_MapCheck = false;
+        c_player.MinMap.SetActive(true);
+        c_player.StatusWindow.SetActive(false);
+        c_player.Map.SetActive(false);
     }
 
     void MenuOnOff()
