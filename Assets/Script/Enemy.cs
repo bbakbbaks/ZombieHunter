@@ -59,13 +59,14 @@ public class Enemy : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        Dead();
-        EnemyAiDetect();
+        Dead();        
         if (n_Hp > 0)
         {
+            EnemyAiDetect();
             nav.SetDestination(targetposition);
+            ShotCheck();
         }
-        ShotCheck();
+        
 	}
 
     void ShotCheck()
@@ -101,8 +102,8 @@ public class Enemy : MonoBehaviour {
                 {
                     if (b_resetRandomLocation)
                     {
-                        randomPoition.x = Random.Range(selfposition.x - 5, selfposition.x + 5);
-                        randomPoition.z = Random.Range(selfposition.z - 5, selfposition.z + 5);
+                        randomPoition.x = Random.Range(selfposition.x - 10, selfposition.x + 10);
+                        randomPoition.z = Random.Range(selfposition.z - 10, selfposition.z + 10);
                         b_resetRandomLocation = false;
                     }
                     this.targetposition = randomPoition;
@@ -141,8 +142,6 @@ public class Enemy : MonoBehaviour {
                     this.targetposition = this.transform.position;
                     m_animator.SetBool("Run", false);
                 }
-                //this.targetposition = c_target.transform.position;
-                //m_animator.SetBool("Run", true);
                 nav.speed = f_movespeed;
                 f_targetDist = Vector3.Distance(this.transform.position, c_target.transform.position);
                 if (f_targetDist <= 1.3)
@@ -155,28 +154,6 @@ public class Enemy : MonoBehaviour {
                         looktime = 1;
                     }
                     m_animator.SetBool("Attack", true);
-
-                    //float looktime = 0;
-                    //if (b_attackfinish)
-                    //{
-                    //    looktime -= Time.deltaTime;
-                    //    if (looktime <= 0)
-                    //    {
-                    //        b_attackfinish = false;
-                    //        looktime = 1;
-                    //    }
-                    //}
-
-                    //if (!(b_attackfinish))
-                    //{
-                    //    b_attack = true;
-                    //    if (b_attack)
-                    //    {
-                    //        this.targetposition = this.transform.position;
-                    //        m_animator.SetBool("Attack", true);
-                    //        b_attackfinish = true;
-                    //    }
-                    //}
                 }
                 else
                 {

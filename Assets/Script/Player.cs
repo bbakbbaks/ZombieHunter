@@ -187,8 +187,7 @@ public class Player : MonoBehaviour {
                 //Time.timeScale = 0;
                 Map.SetActive(true);
                 b_MapCheck = true;
-                MinMap.SetActive(false);
-                //MapCam.transform.position = new Vector3(this.transform.position.x, -150, this.transform.position.z);
+                MinMap.SetActive(false);               
             }            
         }
         else
@@ -198,8 +197,7 @@ public class Player : MonoBehaviour {
                 //Time.timeScale = 1;
                 Map.SetActive(false);
                 b_MapCheck = false;
-                MinMap.SetActive(true);
-                //MapCam.transform.position = new Vector3(this.transform.position.x, -50, this.transform.position.z);
+                MinMap.SetActive(true);               
             }            
         }
         if (GameManager.GetInstance().n_tutorialCount == -1)
@@ -295,10 +293,11 @@ public class Player : MonoBehaviour {
         f_xaxis = Input.GetAxisRaw("MyHorizontal");
         f_zaxis = Input.GetAxisRaw("MyVertical");
         f_mouseYaxis = Input.GetAxis("Mouse X");
-        f_mouseXaxis = Input.GetAxis("Mouse Y");
+        //f_mouseXaxis = Input.GetAxis("Mouse Y");
 
         transform.Translate(new Vector3(f_xaxis, 0, f_zaxis) * fmoveSpeed * Time.deltaTime);
         transform.Rotate(new Vector3(0, f_mouseYaxis * frotateSpeed, 0));
+        //transform.Rotate(new Vector3(f_mouseXaxis * frotateSpeed, 0, 0));
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
